@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nomsa.bbs.Mapper.BoardMapper">
+
+    <select id="getPosts" parameterType="Map" resultType="PostModel">
+      SELECT
+        `post`.index,
+	    `user`.name AS `writer`,
+        `post`.created,
+        `post`.type,
+        `post`.title
+      FROM `post`
+      JOIN `user` ON `post`.writer = `user`.index
+      WHERE
+        `post`.available = 'y'
+        AND `user`.available = 'y'
+        <if test="!type.equals('all')">
+          AND `post`.type = #{type}
+        </if>
+        AND `post`.title LIKE CONCAT('%', #{title}, '%')
+        AND `post`.content LIKE CONCAT('%', #{content}, '%')
+      ORDER BY `post`.index DESC
+    </select>
+
+    <select id="getPost" parameterType="Integer" resultType="PostModel">
+      SELECT
+        `post`.index,
+	    `user`.name AS `writer`,
+        `post`.created,
+        `post`.type,
+        `post`.title,
+        `post`.content
+      FROM `post`
+      JOIN `user` ON `post`.writer = `user`.index
+      WHERE
+        `post`.available = 'y'
+        AND `user`.available = 'y'
+        AND `post`.index = #{postIndex}
+    </select>
+
+    <select id="getFiles" parameterType="Integer" resultType="FileModel">
+      SELECT
+        `file`.index,
+        `file`.name,
+        `file`.size
+      FROM `file`
+      JOIN `post` ON `file`.post = `post`.index
+      WHERE
+        `post`.available = 'y'
+        AND `file`.available = 'y'
+        AND `post`.index = #{postIndex}
+      ORDER BY `file`.index DESC
+    </select>
+
+    <select id="getFile" parameterType="Integer" resultType="FileModel">
+      SELECT
+        `name`,
+        `size`,
+        `bytes`
+      FROM `file`
+      WHERE
+        available = 'y'
+        AND `index` = #{fileIndex}
+    </select>
+
+
+  <select id="getReplies" parameterType="Integer" resultType="ReplyModel">
+      SELECT
+        `reply`.index,
+	    `user`.name AS `writer`,
+        `reply`.created,
+        `reply`.content
+      FROM `reply`
+      JOIN `user` ON `reply`.writer = `user`.index
+      WHERE
+        `reply`.available = 'y'
+        AND `user`.available = 'y'
+        AND `reply`.post = #{postIndex}
+      ORDER BY `reply`.index DESC
+    </select>
+
+    <insert id="writePost" parameterType="Map" useGeneratedKeys="true" keyProperty="index">
+      INSERT INTO `post`
+        (
+          `writer`,
+          `type`,
+          `title`,
+          `content`,
+          `available`
+        )
+      VALUES
+        (
+          (SELECT `index` FROM `user` WHERE `identification` = #{UserModel.identification} AND `password` = #{UserModel.password} AND `name` = #{UserModel.name}),
+          #{PostModel.type},
+          #{PostModel.title},
+          #{PostModel.content},
+          'y'
+        )
+      <selectKey keyProperty="index" resultType="long" order="AFTER">
+        SELECT LAST_INSERT_ID();
+      </selectKey>
+    </insert>
+
+  <insert id="writeFile" parameterType="PostModel">
+    INSERT INTO `file`
+    (
+    `post`,
+    `name`,
+    `size`,
+    `bytes`,
+    `available`
+    )
+    VALUES
+    <foreach collection="files" item="FileModel" separator=",">
+      (
+      #{index},
+      #{FileModel.name},
+      #{FileModel.size},
+      #{FileModel.bytes},
+      'y'
+      )
+    </foreach>
+  </insert>
+
+    <insert id="writeReply" parameterType="Map">
+      INSERT INTO `reply`
+        (
+          `writer`,
+          `post`,
+          `content`,
+          `available`
+        )
+      VALUES
+        (
+          (SELECT `index` FROM `user` WHERE `identification` = #{UserModel.identification} AND `password` = #{UserModel.password} AND `name` = #{UserModel.name}),
+          #{ReplyModel.post},
+          #{ReplyModel.content},
+          'y'
+        )
+    </insert>
+
+</mapper>

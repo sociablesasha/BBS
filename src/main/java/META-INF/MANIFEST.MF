@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: com.nomsa.bbs
+Main-Class: com.nomsa.bbs.Config.Application
+

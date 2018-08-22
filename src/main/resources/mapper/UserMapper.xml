@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.nomsa.bbs.Mapper.UserMapper">
+
+    <select id="getUser" parameterType="UserModel" resultType="UserModel">
+        SELECT
+          `identification`,
+          `name`
+        FROM `user`
+        WHERE
+          `identification` = #{identification}
+          AND `password` = #{password}
+          AND `name` = #{name}
+    </select>
+
+    <select id="signIn" parameterType="UserModel" resultType="UserModel">
+      SELECT
+        `identification`,
+        `password`,
+        `name`,
+        `available`
+      FROM `user`
+      WHERE
+        `available` = 'y'
+        AND `identification` = #{identification}
+        AND `password` = #{password}
+    </select>
+
+    <insert id="signUp" parameterType="UserModel">
+        INSERT INTO `user`
+          (
+            `identification`,
+            `password`,
+            `name`,
+            `available`
+          )
+        VALUES
+          (
+            #{identification},
+            #{password},
+            #{name},
+            'y'
+          )
+    </insert>
+
+</mapper>
