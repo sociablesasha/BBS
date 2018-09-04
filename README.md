@@ -1,40 +1,24 @@
 # **REST API** with JWT, Spring Boot(Maven), MyBatis
-
 ## BBS BackEnd
-
 ### Purpose
-
 1. Understand and implement JWT. 
-
 2. ... Spring Boot Excution.
-
 3. ... Inteceptor, Configurer.
-
 4. ... REST API.
 
 ### Technical Stack
-
 * Spring Boot(Maven)
-
 * MyBatis
-
 * MySQL
-
 * JWT
-
 * REST API
-
 * Swagger
 
 
 ## Spring Boot
-
 **HttpRequest -> Controller -> Service -> Mapper -> MySQL**
-
 ### Applicatin.java
-
 Main Method in Spring Boot.
-
 ```java
 public class Application {
 
@@ -46,11 +30,8 @@ public class Application {
 ```
 
 ### GlobalExceptionHandler.java
-
 400, 401, 404, 500, etc...
-
 Handle exceptions and Return Httpstatus.
-
 ```java
 @RestControllerAdvice
 @RestController
@@ -64,9 +45,7 @@ public class GlobalExceptionHandler implements ErrorController {
 ```
 
 ### JWTInterceptor.java
-
 JWT intercepts all requests.
-
 ```java
 @Component
 public class JWTInterceptor implements HandlerInterceptor {
@@ -83,9 +62,7 @@ public class JWTInterceptor implements HandlerInterceptor {
 ```
 
 ### MVCConfig.java
-
 Solve CORS Issues.
-
 ```java
 @Configuration
 public class MVCConfig implements WebMvcConfigurer {
@@ -105,9 +82,7 @@ public class MVCConfig implements WebMvcConfigurer {
 ```
 
 ### SqlSession.java
-
 Creating SQL Session.
-
 ```java
 @Configuration
 public class SqlSession {
@@ -131,9 +106,7 @@ public class SqlSession {
 ```
 
 ### SwaggerConfig.java
-
 Swagger Configure
-
 ```java
 @Configuration
 @EnableSwagger2
@@ -153,9 +126,7 @@ public class SwaggerConfig {
 
 
 ## DataBase
-
 ### User
-
 Column | Datatype | PK | NN | UQ | UN | AI | Default
 --- | --- | --- | --- | --- | --- | --- | ---
 index | INT(11) | Yes | Yes |  | Yes | Yes |
@@ -165,7 +136,6 @@ name | VARCHAR(15) |  | Yes |  |  |  |
 available | CHAR(1) |  | Yes |  |  |  |
 
 ### Post
-
 Column | Datatype | PK | NN | UQ | UN | AI | Default
 --- | --- | --- | --- | --- | --- | --- | --
 index | INT(11) | Yes | Yes |  | Yes | Yes | 
@@ -177,7 +147,6 @@ content | TEXT |  | Yes |  |  |  |
 available | CHAR(1) |  | Yes |  |  |  |
 
 ### Reply
-
 Column | Datatype | PK | NN | UQ | UN | AI | Default
 --- | --- | --- | --- | --- | --- | --- | --
 index | INT(11) | Yes | Yes |  | Yes | Yes | 
@@ -188,7 +157,6 @@ content | VARCHAR(300) |  | Yes |  |  |  |
 available | CHAR(1) |  | Yes |  |  |  |
 
 ### File
-
 Column | Datatype | PK | NN | UQ | UN | AI | Default
 --- | --- | --- | --- | --- | --- | --- | --
 index | INT(11) | Yes | Yes |  | Yes | Yes | 
@@ -200,7 +168,6 @@ available | CHAR(1) |  | Yes |  |  |  |
 
 
 ## Histories
-
     2018.08.06. JWT Util.
     2018.08.07. Define REST API.
     2018.08.08. Sign Up, Sing In.
